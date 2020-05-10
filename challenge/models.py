@@ -15,8 +15,8 @@ class Board(models.Model):
     created = models.DateTimeField(auto_now_add=True,
                                    help_text='The date the board was created')
     last_started = models.DateTimeField(auto_now_add=True,
-                                           help_text='The date the board was last started or resumed')
-    elapsed = models.IntegerField(default=0,help_text='The time the board has been active for playing')
+                                        help_text='The date the board was last started or resumed')
+    elapsed = models.IntegerField(default=0, help_text='The time the board has been active for playing')
     status_types = (
         (1, "Started"),
         (2, "Paused"),

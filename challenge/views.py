@@ -4,10 +4,13 @@ from django.template import loader
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from challenge.exceptions import MineExplodedError
 from challenge.models import Board
-from challenge.serializers import BoardSerializer, CellRefSerializer, NewGameSerializer
+from challenge.serializers import BoardSerializer, CellRefSerializer, NewBoardSerializer
+from challenge.services import BoardService
 
 
 def index(request):
@@ -26,7 +29,9 @@ class BoardApi(GenericViewSet):
         """
             Gets a list of all the available boards
         """
-        pass
+        boards = Board.objects.all();
+        serializer = BoardSerializer(boards, many=True)
+        return Response(serializer.data)
 
     @swagger_auto_schema(operation_id='boards_get',
                          operation_summary='Get details of a board',
@@ -38,11 +43,13 @@ class BoardApi(GenericViewSet):
         """
             Get the details of a single board
         """
-        pass
+        board = self.get_object()
+        serializer = BoardSerializer(board)
+        return Response(serializer.data)
 
     @swagger_auto_schema(operation_id='boards_create',
                          operation_summary='Create and start a new board',
-                         request_body=NewGameSerializer,
+                         request_body=NewBoardSerializer,
                          responses={
                              status.HTTP_200_OK: BoardSerializer,
                              status.HTTP_400_BAD_REQUEST: 'The number of rows, columns or mines is invalid'}
@@ -51,7 +58,15 @@ class BoardApi(GenericViewSet):
         """
             Create and start a new board with the specified number or rows, columns and mines
         """
-        pass
+        serializer = NewBoardSerializer(data=request.data)
+        if serializer.is_valid():
+            service = BoardService()
+            board = service.create_board(serializer.data['num_rows'], serializer.data['num_columns'],
+                                         serializer.data['num_mines'])
+            board_serializer = BoardSerializer(instance=board)
+            return Response(board_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(operation_id='boards_delete',
                          operation_summary='Delete a board',
@@ -62,7 +77,9 @@ class BoardApi(GenericViewSet):
         """
             Delete a single board
         """
-        pass
+        board = self.get_object()
+        board.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(request_body=CellRefSerializer,
                          operation_summary='Reveal a cell',
@@ -76,6 +93,18 @@ class BoardApi(GenericViewSet):
         """
             Reveals a particular cell
         """
+        board = self.get_object()
+        serializer = CellRefSerializer(data=request.data)
+        if serializer.is_valid():
+            service = BoardService()
+            try:
+                service.reveal_cell(board, serializer.data['row'], serializer.data['column'])
+            except MineExplodedError:
+                pass  # We should change the status of the board (player lose)
+            board_serializer = BoardSerializer(instance=board)
+            return Response(board_serializer.data, status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(method='post', operation_summary='Flag a cell',
                          operation_id='boards_flag_cell',

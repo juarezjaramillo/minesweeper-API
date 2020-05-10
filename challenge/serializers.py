@@ -20,7 +20,7 @@ class BoardSerializer(serializers.ModelSerializer):
                   'created', 'last_started', 'cells', 'elapsed']
 
 
-class NewGameSerializer(serializers.Serializer):
+class NewBoardSerializer(serializers.Serializer):
     num_rows = serializers.IntegerField(min_value=0, default=settings.CHALLENGE_APP['DEFAULT_NUM_ROWS'], required=False,
                                         label='The number of rows in the new board')
     num_columns = serializers.IntegerField(min_value=0, default=settings.CHALLENGE_APP['DEFAULT_NUM_COLUMNS'],
@@ -29,7 +29,7 @@ class NewGameSerializer(serializers.Serializer):
                                          required=False, label='The number of mines in the new board')
 
     class Meta:
-        ref_name = 'NewGame'
+        ref_name = 'NewBoard'
 
 
 class CellRefSerializer(serializers.Serializer):
