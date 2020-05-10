@@ -40,7 +40,11 @@ python manage.py runserver 8000
 ## API documentation
 http://localhost:8000/static/redoc-static.html
 
+## Deployment on Google App Engine
+https://personal-236121.uc.r.appspot.com/
 
+## API documentation on Google App Engine
+https://personal-236121.uc.r.appspot.com/static/redoc-static.html
 
 
 # Original File
