@@ -1,12 +1,13 @@
 from django.http import HttpResponse
-
 # Create your views here.
 from django.template import loader
-from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.utils import swagger_auto_schema, no_body
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 
 from challenge.models import Board
-from challenge.serializers import BoardSerializer
+from challenge.serializers import BoardSerializer, CellRefSerializer, NewGameSerializer
 
 
 def index(request):
@@ -18,41 +19,104 @@ class BoardApi(GenericViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
 
+    @swagger_auto_schema(operation_id='boards',
+                         operation_summary='List all boards'
+                         )
     def list(self, request, format=None):
         """
-            List all boards
+            Gets a list of all the available boards
         """
         pass
 
+    @swagger_auto_schema(operation_id='boards_get',
+                         operation_summary='Get details of a board',
+                         responses={
+                             status.HTTP_200_OK: BoardSerializer,
+                             status.HTTP_404_NOT_FOUND: 'Board not found'}
+                         )
     def retrieve(self, request, pk, format=None):
         """
-            Get details of a board
+            Get the details of a single board
         """
         pass
 
+    @swagger_auto_schema(operation_id='boards_create',
+                         operation_summary='Create and start a new board',
+                         request_body=NewGameSerializer,
+                         responses={
+                             status.HTTP_200_OK: BoardSerializer,
+                             status.HTTP_400_BAD_REQUEST: 'The number of rows, columns or mines is invalid'}
+                         )
     def create(self, request, format=None):
         """
-            Create and start a new game
+            Create and start a new board with the specified number or rows, columns and mines
         """
         pass
 
+    @swagger_auto_schema(operation_id='boards_delete',
+                         operation_summary='Delete a board',
+                         responses={status.HTTP_204_NO_CONTENT: "Board deleted",
+                                    status.HTTP_404_NOT_FOUND: 'Board not found'}
+                         )
     def destroy(self, request, *args, **kwargs):
         """
-            Delete a board
+            Delete a single board
         """
         pass
 
+    @swagger_auto_schema(request_body=CellRefSerializer,
+                         operation_summary='Reveal a cell',
+                         operation_id='boards_reveal_cell',
+                         responses={status.HTTP_200_OK: BoardSerializer,
+                                    status.HTTP_404_NOT_FOUND: 'Board not found',
+                                    status.HTTP_400_BAD_REQUEST: 'The row or column of the cell to reveal is invalid'}
+                         )
+    @action(['post'], detail=True)
     def reveal(self, request, *args, **kwargs):
         """
-            Reveals a cell
+            Reveals a particular cell
         """
 
+    @swagger_auto_schema(method='post', operation_summary='Flag a cell',
+                         operation_id='boards_flag_cell',
+                         request_body=CellRefSerializer,
+                         operation_description='Flag a particular cell',
+                         responses={status.HTTP_200_OK: 'The cell was successfully flagged',
+                                    status.HTTP_404_NOT_FOUND: 'Board does not exist',
+                                    status.HTTP_400_BAD_REQUEST: 'The row or column of the cell to flag is invalid'
+                                    })
+    @swagger_auto_schema(method='delete', operation_summary='Unflag a cell',
+                         operation_id='boards_unflag_cell',
+                         request_body=CellRefSerializer,
+                         operation_description='Removes the flag a particular cell',
+                         responses={status.HTTP_200_OK: 'The cell was successfully unflagged',
+                                    status.HTTP_404_NOT_FOUND: 'Board does not exist',
+                                    status.HTTP_400_BAD_REQUEST: 'The row or column of the cell to flag is invalid'
+                                    })
+    @action(['post', 'delete'], detail=True, url_path='flag')
     def flag(self, request, *args, **kwargs):
         pass
 
+    @swagger_auto_schema(method='post', operation_summary='Pause a board',
+                         operation_id='boards_pause',
+                         request_body=no_body,
+                         responses={status.HTTP_200_OK: BoardSerializer,
+                                    status.HTTP_404_NOT_FOUND: 'Board does not exist'})
+    @action(['post'], detail=True)
     def pause(self, request, *args, **kwargs):
+        """
+        Pauses a board. While the board is paused, the elapsed time of the board does not increase
+        """
         pass
 
+    @swagger_auto_schema(method='post', operation_summary='Resume a board',
+                         operation_id='boards_resume',
+                         request_body=no_body,
+                         responses={status.HTTP_200_OK: BoardSerializer,
+                                    status.HTTP_404_NOT_FOUND: 'Board does not exist'})
+    @action(['post'], detail=True)
     def resume(self, request, *args, **kwargs):
+        """
+        Resumes a board
+        """
         pass
-

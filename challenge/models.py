@@ -47,5 +47,5 @@ class Cell(models.Model):
     column = models.IntegerField(default=0, blank=False, null=False,
                                  help_text='The column for the cell inside the board')
 
-#    class Meta:
-#        ordering = ['id']  # to always retrieve them ordered
+    class Meta:
+        ordering = ['id']  # to always retrieve them ordered
