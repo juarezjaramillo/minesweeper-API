@@ -53,52 +53,52 @@ $(function () {
     // When the user clicks a cell
     $board.on("mousedown", "td", function (event) {
         switch (event.which) {
-        case 1:
-            api.boardsRevealCell(theBoard.id, {
-                'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
-            },
-            function (error, data, response) {
-                if (error) {
-                    alert(error);
-                } else {
-                    setBoard(data);
-                }
-            });
-            break;
-        case 3:
-            let row = parseInt($(this).attr("data-row"));
-            let column  = parseInt($(this).attr("data-column"));
-            let cell = theBoard.cells[(row * theBoard.numColumns) + column]
-            let $td = $(this);
-            console.log(cell);
+            case 1:
+                api.boardsRevealCell(theBoard.id, {
+                        'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
+                    },
+                    function (error, data, response) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            setBoard(data);
+                        }
+                    });
+                break;
+            case 3:
+                let row = parseInt($(this).attr("data-row"));
+                let column = parseInt($(this).attr("data-column"));
+                let cell = theBoard.cells[(row * theBoard.numColumns) + column]
+                let $td = $(this);
+                console.log(cell);
 
-            if (cell.flagged) {
-                api.boardsUnflagCell(theBoard.id, {
-                        'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
-                    },
-                    function (error, data, response) {
-                        if (error) {
-                            alert(error);
-                        } else {
-                            $td.removeClass("flagged");
-                            cell.flagged=false;
-                        }
-                    });
-            }else {
-                api.boardsFlagCell(theBoard.id, {
-                        'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
-                    },
-                    function (error, data, response) {
-                        if (error) {
-                            alert(error);
-                        } else {
-                            $td.addClass("flagged");
-                            cell.flagged=true;
-                        }
-                    });
-            }
-            break;
-    }
+                if (cell.flagged) {
+                    api.boardsUnflagCell(theBoard.id, {
+                            'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
+                        },
+                        function (error, data, response) {
+                            if (error) {
+                                alert(error);
+                            } else {
+                                $td.removeClass("flagged");
+                                cell.flagged = false;
+                            }
+                        });
+                } else {
+                    api.boardsFlagCell(theBoard.id, {
+                            'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
+                        },
+                        function (error, data, response) {
+                            if (error) {
+                                alert(error);
+                            } else {
+                                $td.addClass("flagged");
+                                cell.flagged = true;
+                            }
+                        });
+                }
+                break;
+        }
 
     });
 
@@ -109,6 +109,12 @@ $(function () {
     function setBoard(board) {
         theBoard = board;
         renderBoard(theBoard);
+        let status = board.status === 3 ? "Finished" : "Started";
+        let result = board.result === 1 ? "Win" : (board.result == 2 ? "Lose" : "");
+        $("#status").text("Board " + status + (result ? " - You " + result : ""))
+        if (isBoardCompleted(board)) {
+            showAlertBoardCompleted(board);
+        }
     }
 
     function renderBoard(board) {
@@ -128,15 +134,31 @@ $(function () {
                     // When the value is zero we do not show the number
                     $td.html("&nbsp;");
                 }
-                if(cell.mine && $("#show-mines").prop('checked')){
+                if (cell.mine && $("#show-mines").prop('checked')) {
                     $td.addClass("mine");
-                }else if(cell.revealed){
+                } else if (cell.revealed) {
                     $td.addClass("revealed");
-                }else if(cell.flagged){
+                } else if (cell.flagged) {
                     $td.addClass("flagged");
                 }
 
             }
         }
+    }
+
+    function isBoardCompleted(board) {
+        return board.status == 3;
+    }
+
+    function showAlertBoardCompleted(board) {
+        switch (board.result) {
+            case 1:
+                alert("You win")
+                break;
+            case 2:
+                alert("You lose")
+                break;
+        }
+
     }
 });

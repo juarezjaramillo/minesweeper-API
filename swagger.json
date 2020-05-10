@@ -1,0 +1,455 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Minesweeper API",
+        "description": "A simple Minesweeper API for the Deviget code challenge",
+        "termsOfService": "https://www.google.com/policies/terms/",
+        "contact": {
+            "email": "juarezjaramillo@deviget.com"
+        },
+        "license": {
+            "name": "BSD License"
+        },
+        "version": "v1"
+    },
+    "basePath": "/api",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {},
+    "paths": {
+        "/boards": {
+            "get": {
+                "operationId": "boards",
+                "summary": "List all boards",
+                "description": "Gets a list of all the available boards",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Board"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "post": {
+                "operationId": "boards_create",
+                "summary": "Create and start a new board",
+                "description": "Create and start a new board with the specified number or rows, columns and mines",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewBoard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Board"
+                        }
+                    },
+                    "400": {
+                        "description": "The number of rows, columns or mines is invalid"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": []
+        },
+        "/boards/{id}": {
+            "get": {
+                "operationId": "boards_get",
+                "summary": "Get details of a board",
+                "description": "Get the details of a single board",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Board"
+                        }
+                    },
+                    "404": {
+                        "description": "Board not found"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "delete": {
+                "operationId": "boards_delete",
+                "summary": "Delete a board",
+                "description": "Delete a single board",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": "Board deleted"
+                    },
+                    "404": {
+                        "description": "Board not found"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this board.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/boards/{id}/flag": {
+            "post": {
+                "operationId": "boards_flag_cell",
+                "summary": "Flag a cell",
+                "description": "Flag a particular cell",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CellRef"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The cell was successfully flagged"
+                    },
+                    "404": {
+                        "description": "Board does not exist"
+                    },
+                    "400": {
+                        "description": "The row or column of the cell to flag is invalid"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "delete": {
+                "operationId": "boards_unflag_cell",
+                "summary": "Unflag a cell",
+                "description": "Removes the flag a particular cell",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CellRef"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The cell was successfully unflagged"
+                    },
+                    "404": {
+                        "description": "Board does not exist"
+                    },
+                    "400": {
+                        "description": "The row or column of the cell to flag is invalid"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this board.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/boards/{id}/pause": {
+            "post": {
+                "operationId": "boards_pause",
+                "summary": "Pause a board",
+                "description": "Pauses a board. While the board is paused, the elapsed time of the board does not increase",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Board"
+                        }
+                    },
+                    "404": {
+                        "description": "Board does not exist"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this board.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/boards/{id}/resume": {
+            "post": {
+                "operationId": "boards_resume",
+                "summary": "Resume a board",
+                "description": "Resumes a board",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Board"
+                        }
+                    },
+                    "404": {
+                        "description": "Board does not exist"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this board.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/boards/{id}/reveal": {
+            "post": {
+                "operationId": "boards_reveal_cell",
+                "summary": "Reveal a cell",
+                "description": "Reveals a particular cell",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CellRef"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Board"
+                        }
+                    },
+                    "404": {
+                        "description": "Board not found"
+                    },
+                    "400": {
+                        "description": "The row or column of the cell to reveal is invalid"
+                    }
+                },
+                "tags": [
+                    "boards"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this board.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "Cell": {
+            "type": "object",
+            "properties": {
+                "row": {
+                    "title": "Row",
+                    "description": "The row for the cell inside the board",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "column": {
+                    "title": "Column",
+                    "description": "The column for the cell inside the board",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "mine": {
+                    "title": "Mine",
+                    "description": "Indicates if the cell contains a mine",
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "value": {
+                    "title": "Value",
+                    "description": "The number of adjacent cells that contain a mine",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "revealed": {
+                    "title": "Revealed",
+                    "description": "Indicates if the cell has been revealed",
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "flagged": {
+                    "title": "Flagged",
+                    "description": "Indicates if the cell has been flagged",
+                    "type": "boolean"
+                }
+            }
+        },
+        "Board": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "num_rows": {
+                    "title": "Num rows",
+                    "description": "The number of rows in the board",
+                    "type": "integer"
+                },
+                "num_columns": {
+                    "title": "Num columns",
+                    "description": "The number of columns in the board",
+                    "type": "integer"
+                },
+                "num_mines": {
+                    "title": "Num mines",
+                    "description": "The number of mines in the board",
+                    "type": "integer"
+                },
+                "status": {
+                    "title": "Status",
+                    "description": "The status of the board. Started, Paused or Finished",
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "result": {
+                    "title": "Result",
+                    "description": "The result of the board. Win, Lose, Timeout",
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ],
+                    "x-nullable": true
+                },
+                "created": {
+                    "title": "Created",
+                    "description": "The date the board was created",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "last_started": {
+                    "title": "Last started",
+                    "description": "The date the board was last started or resumed",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "cells": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Cell"
+                    },
+                    "readOnly": true
+                },
+                "elapsed": {
+                    "title": "Elapsed",
+                    "description": "The time the board has been active for playing",
+                    "type": "integer"
+                }
+            }
+        },
+        "NewBoard": {
+            "type": "object",
+            "properties": {
+                "num_rows": {
+                    "title": "The number of rows in the new board",
+                    "type": "integer",
+                    "default": 8,
+                    "minimum": 0
+                },
+                "num_columns": {
+                    "title": "The number of columns in the new board",
+                    "type": "integer",
+                    "default": 8,
+                    "minimum": 0
+                },
+                "num_mines": {
+                    "title": "The number of mines in the new board",
+                    "type": "integer",
+                    "default": 8,
+                    "minimum": 0
+                }
+            }
+        },
+        "CellRef": {
+            "required": [
+                "row",
+                "column"
+            ],
+            "type": "object",
+            "properties": {
+                "row": {
+                    "title": "The row of the cell",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "column": {
+                    "title": "The column of the cell",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        }
+    }
+}

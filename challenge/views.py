@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 # Create your views here.
 from django.template import loader
@@ -101,6 +102,8 @@ class BoardApi(GenericViewSet):
                 service.reveal_cell(board, serializer.data['row'], serializer.data['column'])
             except MineExplodedError:
                 pass  # We should change the status of the board (player lose)
+            except ValidationError:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             board_serializer = BoardSerializer(instance=board)
             return Response(board_serializer.data, status.HTTP_200_OK)
 
@@ -128,11 +131,14 @@ class BoardApi(GenericViewSet):
         cell_ref = CellRefSerializer(data=request.data)
         if cell_ref.is_valid(raise_exception=True):
             board_service = BoardService()
-            if request.method == 'POST':
-                board_service.flag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
-            else:
-                board_service.unflag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
-            return Response(BoardSerializer(instance=board).data, status=status.HTTP_200_OK)
+            try:
+                if request.method == 'POST':
+                    board_service.flag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
+                else:
+                    board_service.unflag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
+                return Response(BoardSerializer(instance=board).data, status=status.HTTP_200_OK)
+            except ValidationError:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
         # handle already revealed
         return Response(cell_ref.errors, status=status.HTTP_400_BAD_REQUEST)

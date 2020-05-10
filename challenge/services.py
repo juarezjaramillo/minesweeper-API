@@ -1,5 +1,7 @@
 import random
 
+from django.core.exceptions import ValidationError
+
 from challenge.exceptions import MineExplodedError
 from challenge.models import Board, Cell
 
@@ -24,6 +26,8 @@ class BoardService:
             cell.mine = True
 
     def flag_cell(self, board, row, column):
+        if board.status == 2:
+            raise ValidationError('Board already finished')
         self.__flag_cell(board, row, column, True)
 
     def unflag_cell(self, board, row, column):
@@ -37,14 +41,33 @@ class BoardService:
         cell.save()
 
     def reveal_cell(self, board, row, column):
+        if board.status == 2:
+            raise ValidationError('Board already finished')
         temp_cells = board.cells.all()
         # The cells are in a list, for easier processing we transform it into a bi-dimensional array
         cells = self.__to_bidim_array(list(temp_cells), board.num_rows, board.num_columns)
         try:
             self.__reveal_cell(board, cells, row, column)
+            self.check_completion(board)
         except MineExplodedError:
-            # finish game, player lose
+            self.finish_board(board, 'mine')
             pass
+
+    def check_completion(self, board):
+        # board is finished when all cells are revealed except the ones that contain a mine
+        count = board.cells.filter(revealed=True).count()
+        if count + board.num_mines == board.num_rows * board.num_columns:
+            self.finish_board(board, 'win')
+
+    def finish_board(self, board, reason):
+        board.status = 2
+        if reason == 'mine':
+            board.result = 2
+        elif reason == 'win':
+            board.result = 1
+        else:
+            board.result = 2
+        board.save()
 
     def __reveal_cell(self, board, cells, row, column):
         cell = cells[row][column]
