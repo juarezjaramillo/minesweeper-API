@@ -1,7 +1,7 @@
 {
   "name": "minesweeper_api",
-  "version": "v1",
-  "description": "A_simple_Minesweeper_API_for_Deviget_code_challengue",
+  "version": "1.0.0",
+  "description": "A_simple_Minesweeper_API_for_Deviget_code_challenge",
   "license": "BSD License",
   "main": "src/index.js",
   "scripts": {

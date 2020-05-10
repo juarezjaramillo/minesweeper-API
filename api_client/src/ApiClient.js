@@ -47,9 +47,9 @@
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * @type {String}
-     * @default http://www.example.com/api
+     * @default api
      */
-    this.basePath = 'http://www.example.com/api'.replace(/\/+$/, '');
+    this.basePath = 'api'.replace(/\/+$/, '');
 
     /**
      * The authentication methods to be included for all API calls.

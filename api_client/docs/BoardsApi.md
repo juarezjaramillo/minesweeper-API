@@ -1,6 +1,6 @@
 # MinesweeperApi.BoardsApi
 
-All URIs are relative to *http://www.example.com/api*
+All URIs are relative to *api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
