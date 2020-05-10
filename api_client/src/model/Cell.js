@@ -1,6 +1,6 @@
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -65,6 +65,8 @@
         obj.value = ApiClient.convertToType(data['value'], 'Number');
       if (data.hasOwnProperty('revealed'))
         obj.revealed = ApiClient.convertToType(data['revealed'], 'Boolean');
+      if (data.hasOwnProperty('flagged'))
+        obj.flagged = ApiClient.convertToType(data['flagged'], 'Boolean');
     }
     return obj;
   }
@@ -98,6 +100,12 @@
    * @member {Boolean} revealed
    */
   exports.prototype.revealed = undefined;
+
+  /**
+   * Indicates if the cell has been flagged
+   * @member {Boolean} flagged
+   */
+  exports.prototype.flagged = undefined;
 
   return exports;
 

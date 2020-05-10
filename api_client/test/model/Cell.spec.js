@@ -1,6 +1,6 @@
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -69,6 +69,12 @@
         // TODO: update the code to test the property revealed
         expect(instance).to.have.property('revealed');
         // expect(instance.revealed).to.be(expectedValueLiteral);
+      });
+
+      it('should have the property flagged (base name: "flagged")', function() {
+        // TODO: update the code to test the property flagged
+        expect(instance).to.have.property('flagged');
+        // expect(instance.flagged).to.be(expectedValueLiteral);
       });
 
     });

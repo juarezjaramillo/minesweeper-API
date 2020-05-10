@@ -8,5 +8,6 @@ Name | Type | Description | Notes
 **mine** | **Boolean** | Indicates if the cell contains a mine | [optional] 
 **value** | **Number** | The number of adjacent cells that contain a mine | [optional] 
 **revealed** | **Boolean** | Indicates if the cell has been revealed | [optional] 
+**flagged** | **Boolean** | Indicates if the cell has been flagged | [optional] 
 
 

@@ -110,7 +110,7 @@ api.boards(callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *api*
+All URIs are relative to *http://www.example.com/api*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

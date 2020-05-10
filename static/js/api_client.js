@@ -1978,7 +1978,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 (function (Buffer){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -2581,7 +2581,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"buffer":17,"fs":16,"querystring":21,"superagent":2}],9:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -3075,7 +3075,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"../ApiClient":8,"../model/Board":11,"../model/CellRef":13,"../model/NewBoard":14}],10:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -3101,7 +3101,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
   'use strict';
 
   /**
-   * A_simple_Minesweeper_API_for_Deviget_code_challengue.<br>
+   * A_simple_Minesweeper_API_for_the_Deviget_code_challenge.<br>
    * The <code>index</code> module provides access to constructors for all the classes which comprise the public API.
    * <p>
    * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
@@ -3170,7 +3170,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"./ApiClient":8,"./api/BoardsApi":9,"./model/Board":11,"./model/Cell":12,"./model/CellRef":13,"./model/NewBoard":14}],11:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -3314,7 +3314,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"../ApiClient":8,"./Cell":12}],12:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -3379,6 +3379,8 @@ exports.cleanHeader = function(header, shouldStripCookie){
         obj.value = ApiClient.convertToType(data['value'], 'Number');
       if (data.hasOwnProperty('revealed'))
         obj.revealed = ApiClient.convertToType(data['revealed'], 'Boolean');
+      if (data.hasOwnProperty('flagged'))
+        obj.flagged = ApiClient.convertToType(data['flagged'], 'Boolean');
     }
     return obj;
   }
@@ -3413,6 +3415,12 @@ exports.cleanHeader = function(header, shouldStripCookie){
    */
   exports.prototype.revealed = undefined;
 
+  /**
+   * Indicates if the cell has been flagged
+   * @member {Boolean} flagged
+   */
+  exports.prototype.flagged = undefined;
+
   return exports;
 
 }));
@@ -3420,7 +3428,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"../ApiClient":8}],13:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -3504,7 +3512,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 },{"../ApiClient":8}],14:[function(require,module,exports){
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com

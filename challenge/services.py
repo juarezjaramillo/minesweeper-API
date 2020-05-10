@@ -23,6 +23,19 @@ class BoardService:
         else:
             cell.mine = True
 
+    def flag_cell(self, board, row, column):
+        self.__flag_cell(board, row, column, True)
+
+    def unflag_cell(self, board, row, column):
+        self.__flag_cell(board, row, column, False)
+
+    def __flag_cell(self, board, row, column, flag):
+        index = (row * board.num_columns) + column
+        cell = board.cells.all()[index]
+        cell.flagged = flag
+        print(cell.flagged)
+        cell.save()
+
     def reveal_cell(self, board, row, column):
         temp_cells = board.cells.all()
         # The cells are in a list, for easier processing we transform it into a bi-dimensional array

@@ -124,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-print(STATIC_ROOT)
+#print(STATIC_ROOT)
 
 CHALLENGE_APP = {
     'DEFAULT_NUM_ROWS': 8,

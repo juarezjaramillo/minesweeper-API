@@ -1,6 +1,6 @@
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -26,7 +26,7 @@
   'use strict';
 
   /**
-   * A_simple_Minesweeper_API_for_Deviget_code_challengue.<br>
+   * A_simple_Minesweeper_API_for_the_Deviget_code_challenge.<br>
    * The <code>index</code> module provides access to constructors for all the classes which comprise the public API.
    * <p>
    * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:

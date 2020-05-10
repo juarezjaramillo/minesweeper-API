@@ -1,6 +1,6 @@
 /*
  * Minesweeper API
- * A simple Minesweeper API for Deviget code challengue
+ * A simple Minesweeper API for the Deviget code challenge
  *
  * OpenAPI spec version: v1
  * Contact: juarezjaramillo@deviget.com
@@ -86,6 +86,8 @@
                   expect(data.value).to.be(0);
                   expect(data.revealed).to.be.a('boolean');
                   expect(data.revealed).to.be(false);
+                  expect(data.flagged).to.be.a('boolean');
+                  expect(data.flagged).to.be(false);
   
                         }
               }
@@ -149,6 +151,8 @@
                 expect(data.value).to.be(0);
                 expect(data.revealed).to.be.a('boolean');
                 expect(data.revealed).to.be(false);
+                expect(data.flagged).to.be.a('boolean');
+                expect(data.flagged).to.be(false);
 
                       }
             }
@@ -249,6 +253,8 @@
                 expect(data.value).to.be(0);
                 expect(data.revealed).to.be.a('boolean');
                 expect(data.revealed).to.be(false);
+                expect(data.flagged).to.be.a('boolean');
+                expect(data.flagged).to.be(false);
 
                       }
             }
@@ -308,6 +314,8 @@
                 expect(data.value).to.be(0);
                 expect(data.revealed).to.be.a('boolean');
                 expect(data.revealed).to.be(false);
+                expect(data.flagged).to.be.a('boolean');
+                expect(data.flagged).to.be(false);
 
                       }
             }
@@ -367,6 +375,8 @@
                 expect(data.value).to.be(0);
                 expect(data.revealed).to.be.a('boolean');
                 expect(data.revealed).to.be(false);
+                expect(data.flagged).to.be.a('boolean');
+                expect(data.flagged).to.be(false);
 
                       }
             }
@@ -429,6 +439,8 @@
                 expect(data.value).to.be(0);
                 expect(data.revealed).to.be.a('boolean');
                 expect(data.revealed).to.be(false);
+                expect(data.flagged).to.be.a('boolean');
+                expect(data.flagged).to.be(false);
 
                       }
             }

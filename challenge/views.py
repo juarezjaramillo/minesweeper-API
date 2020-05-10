@@ -124,7 +124,18 @@ class BoardApi(GenericViewSet):
                                     })
     @action(['post', 'delete'], detail=True, url_path='flag')
     def flag(self, request, *args, **kwargs):
-        pass
+        board = self.get_object()
+        cell_ref = CellRefSerializer(data=request.data)
+        if cell_ref.is_valid(raise_exception=True):
+            board_service = BoardService()
+            if request.method == 'POST':
+                board_service.flag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
+            else:
+                board_service.unflag_cell(board, cell_ref.data['row'], cell_ref.data['column'])
+            return Response(BoardSerializer(instance=board).data, status=status.HTTP_200_OK)
+
+        # handle already revealed
+        return Response(cell_ref.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(method='post', operation_summary='Pause a board',
                          operation_id='boards_pause',

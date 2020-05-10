@@ -7,7 +7,7 @@ from minesweeperAPI import settings
 class CellSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cell
-        fields = ['row', 'column', 'mine', 'value', 'revealed']
+        fields = ['row', 'column', 'mine', 'value', 'revealed', 'flagged']
         read_only_fields = ['row', 'column', 'mine', 'value', 'revealed']
 
 
