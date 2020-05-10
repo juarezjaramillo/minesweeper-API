@@ -19,3 +19,11 @@ body {
 #board tr td.revealed {
     background: #cccccc;
 }
+
+#board tr td.mine {
+    background: red;
+}
+
+#board tr td.flagged {
+    background: blue;
+}

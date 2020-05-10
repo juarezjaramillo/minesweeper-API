@@ -27,24 +27,40 @@ class BoardService:
         temp_cells = board.cells.all()
         # The cells are in a list, for easier processing we transform it into a bi-dimensional array
         cells = self.__to_bidim_array(list(temp_cells), board.num_rows, board.num_columns)
+        try:
+            self.__reveal_cell(board, cells, row, column)
+        except MineExplodedError:
+            # finish game, player lose
+            pass
+
+    def __reveal_cell(self, board, cells, row, column):
         cell = cells[row][column]
-        if cell.revealed:  # already processed, ignore
+        print(row, column)
+        print(cell)
+        if cell.revealed:
             return
+        # Is there a mine?
         cell.revealed = True
         if cell.mine:
             cell.save()
             raise MineExplodedError
-        # No we need to calculated the number of adjacent cells with a mine
+        # Now we need to calculated the number of adjacent cells with a mine
         # The adjacent cells are in a "circle" around the cell
         # the "circle" is represented by the previous and next rows and the previous and next column
         # we must validate that the indexes do not go below zero or exceed the number of rows/columns
         mine_count = 0
-        for i in range(max(row - 1, 0), min(row + 1, board.num_rows - 1)):  # previous/next row
-            for j in range(max(column - 1, 0), min(column + 1, board.num_columns - 1)):  # previous/next columns
-                if cells[i][j]:
+        for i in range(max(row - 1, 0), min(row + 1, board.num_rows - 1) + 1):  # previous/next row
+            for j in range(max(column - 1, 0), min(column + 1, board.num_columns - 1) + 1):  # previous/next columns
+                if cells[i][j].mine:
                     mine_count += 1
+
         cell.value = mine_count
         cell.save()
+        # if there are no adjacent mines, repeat for all adjacent cells
+        if mine_count == 0:
+            for i in range(max(row - 1, 0), min(row + 1, board.num_rows - 1) + 1):
+                for j in range(max(column - 1, 0), min(column + 1, board.num_columns - 1) + 1):
+                    self.__reveal_cell(board, cells, i, j)
 
     def __to_bidim_array(self, cell_list, num_rows, num_columns):
         cells = []

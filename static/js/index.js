@@ -64,6 +64,10 @@ $(function () {
             });
     });
 
+    $("#show-mines").change(function () {
+        renderBoard(theBoard);
+    })
+
     function setBoard(board) {
         theBoard = board;
         renderBoard(theBoard);
@@ -86,8 +90,12 @@ $(function () {
                     // When the value is zero we do not show the number
                     $td.html("&nbsp;");
                 }
-                if (cell.revealed) {
+                if(cell.mine && $("#show-mines").prop('checked')){
+                    $td.addClass("mine");
+                }else if(cell.revealed){
                     $td.addClass("revealed");
+                }else if(cell.flagged){
+                    $td.addClass("flagged");
                 }
 
             }
