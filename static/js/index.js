@@ -1,8 +1,96 @@
-let api = new Minesweeper.BoardsApi()
-api.boards(function (error, data, response) {
-    if (error) {
-        console.error(error);
-    } else {
-        console.log(data);
+$(function () {
+    let $board = $("#board");
+    let $selectBoard = $("#select-board");
+    let $newBoard = $("#new_board")
+    // The board currently selected
+    let theBoard = null;
+
+    let api = new Minesweeper.BoardsApi()
+    // We obtain the list of boards
+    api.boards(function (error, data, response) {
+        if (error) {
+            alert(error);
+        } else {
+            console.log(data);
+            $selectBoard.empty();
+            // For each board, we add an option
+            $.each(data, function (key, value) {
+                $selectBoard.append('<option value=' + value.id + '>' + value.id + '</option>');
+            });
+            //Select first board, if any
+            if (data.length > 0) {
+                $selectBoard.val(data[0].id);
+                $selectBoard.change(); // Trigger board selection
+            }
+        }
+    });
+
+    // When the user selects a different board
+    $selectBoard.change(() => {
+        // Although we already obtained the boards from the api
+        // For demonstration purpose, we call the API again to get the selected board
+        api.boardsGet($selectBoard.val(), function (error, data, response) {
+            if (error) {
+                alert(error);
+            } else {
+                setBoard(data);
+            }
+        });
+    });
+
+    // Start new board - click
+    $newBoard.click(function () {
+        api.boardsCreate({'num_rows': 9, 'num_columns': 7, 'num_mines': 10}, function (error, data, response) {
+            if (error) {
+                alert("error");
+            } else {
+                $selectBoard.append('<option value=' + data.id + '>' + data.id + '</option>');
+                $selectBoard.val(data.id);
+                setBoard(data);
+            }
+        });
+    });
+    // When the user clicks a cell
+    $board.on("click", "td", function () {
+        api.boardsRevealCell(theBoard.id, {
+                'row': $(this).attr("data-row"), "column": $(this).attr("data-column")
+            },
+            function (error, data, response) {
+                if (error) {
+                    alert(error);
+                } else {
+                    setBoard(data);
+                }
+            });
+    });
+
+    function setBoard(board) {
+        theBoard = board;
+        renderBoard(theBoard);
+    }
+
+    function renderBoard(board) {
+        console.log(JSON.stringify(board));
+        $board.empty()
+        for (let i = 0; i < board.numRows; i++) {
+            let $tr = $("<tr></tr>").appendTo($board)
+            for (let j = 0; j < board.numColumns; j++) {
+                let $td = $("<td></td>").appendTo($tr);
+                // The cells are obtained in order from the backend
+                let cell = board.cells[(i * board.numColumns) + j]
+                $td.attr("data-row", i).attr("data-column", j);
+
+                if (cell.value > 0) {
+                    $td.text(cell.value);
+                } else {
+                    // When the value is zero we do not show the number
+                    $td.html("&nbsp;");
+                }
+                if (cell.revealed) {
+                    $td.addClass("revealed");
+                }
+
+            }
+        }
     }
 });

@@ -1,0 +1,21 @@
+body {
+    font-size: 12px;
+}
+
+#board {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#board tr td {
+    border: 0.125rem solid white;
+    background: #f1f1f1;
+    width: 1.5rem;
+    height: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+#board tr td.revealed {
+    background: #cccccc;
+}
