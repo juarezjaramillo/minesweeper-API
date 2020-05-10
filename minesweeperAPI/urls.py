@@ -25,9 +25,9 @@ from challenge import views
 api_info = openapi.Info(
     title="Minesweeper API",
     default_version='v1',
-    description="A simple Minesweeper API for Deviget code challengue",
+    description="A simple Minesweeper API for the Deviget code challenge",
     terms_of_service="https://www.google.com/policies/terms/",
-    contact=openapi.Contact(email="https://github.com/juarezjaramillo"),
+    contact=openapi.Contact(email="juarezjaramillo@deviget.com"),
     license=openapi.License(name="BSD License")
 )
 schema_view = get_schema_view(
